@@ -18,8 +18,8 @@ $APP_NAME = $envVars["APP_NAME"]
 $KEY_VAULT_NAME = $envVars["KEY_VAULT_NAME"]
 $SECRET_NAME = $envVars["SECRET_NAME"]
 
-# Azure login
-Connect-AzAccount
+# Azure login using device authentication
+Connect-AzAccount -UseDeviceAuthentication
 
 # Register the app
 $displayName = $APP_NAME
