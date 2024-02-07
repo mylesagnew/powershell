@@ -23,7 +23,13 @@ Connect-AzAccount
 
 # Register the app
 $displayName = $APP_NAME
-$app = New-AzADApplication -DisplayName $displayName -IdentifierUris "http://$CLIENT_NAME" -HomePage "http://$CLIENT_NAME" -LogoutUrl "http://$CLIENT_NAME/logout" -PublicClient $false
+$app = New-AzADApplication -DisplayName $displayName -IdentifierUris "http://$CLIENT_NAME" -HomePage "http://$CLIENT_NAME" -AvailableToOtherTenants $false
+
+# Check if app creation was successful
+if ($app -eq $null) {
+    Write-Error "Failed to create the Azure AD application."
+    exit 1
+}
 
 # Create service principal
 $sp = New-AzADServicePrincipal -ApplicationId $app.ApplicationId
@@ -35,7 +41,7 @@ $secret = New-AzADAppCredential -ApplicationId $app.ApplicationId -Password (Con
 Write-Host "Generated Client Secret: $($secret.Password)"
 
 # Store the secret securely in Azure Key Vault
-$secretValue = $secret.Password | ConvertFrom-SecureString
+$secretValue = ConvertFrom-SecureString -SecureString $secret.Password -AsPlainText
 Set-AzKeyVaultSecret -VaultName $KEY_VAULT_NAME -Name $SECRET_NAME -SecretValue $secretValue
 
 # Assign Sentinel Reader role to the service principal
