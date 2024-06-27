@@ -15,6 +15,11 @@ $resourceGroup = [System.Environment]::GetEnvironmentVariable("RESOURCE_GROUP")
 $firewallPolicyName = [System.Environment]::GetEnvironmentVariable("FIREWALL_POLICY_NAME")
 $exportPath = [System.Environment]::GetEnvironmentVariable("EXPORT_PATH")
 
+# Verify and create export path if necessary
+if (-not (Test-Path $exportPath)) {
+    New-Item -ItemType Directory -Path $exportPath -Force
+}
+
 # Connect to Azure and set context
 Connect-AzAccount
 Set-AzContext -Subscription $subscriptionId
