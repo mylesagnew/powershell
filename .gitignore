@@ -1,0 +1,2 @@
+# Local configuration — copy from .env.example, never commit
+.env
