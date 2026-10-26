@@ -46,8 +46,7 @@ try {
 $securePassword = Get-Random -Count 16
 $secret = New-AzADAppCredential -ApplicationId $app.ApplicationId -Password (ConvertTo-SecureString -String $securePassword -AsPlainText -Force)
 
-# Output the generated client secret (redact or store securely)
-Write-Host "Generated Client Secret (DO NOT SHARE): $($secret.Password)"
+# The client secret is never printed; it is only written to Key Vault below
 
 # Store the secret securely in Azure Key Vault (use Set-AzKeyVaultSecret -SecureValue)
 $secretValue = ConvertFrom-SecureString -SecureString $secret.Password -AsPlainText
